@@ -94,3 +94,26 @@ exports.updateUser = async (req, res) => {
         res.status(500).send(err.message);
     }
 };
+
+
+exports.updateUsers = async (req, res) => {
+    try {
+        const ids = req.body.ids;
+        const body = req.body;
+        let users = JSON.parse(fs.readFileSync('./randomusers.json'));
+        const exist = users.some(user => user.id === id);
+        if (!exist) {
+            return res.status(404).send("No user found!");
+        }
+        let updateUsers = users.map(user => user.id === id ? { ...user, ...body } : user);
+        updateUsers = JSON.stringify(updateUsers, null, 2);
+        fs.writeFile('./randomusers.json', updateUsers, (err, data) => {
+            if (err) throw err;
+            res.status(200).send(data);
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+};
