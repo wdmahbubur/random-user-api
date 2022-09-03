@@ -48,13 +48,14 @@ const generateObjectId = function () {
 exports.saveUser = async (req, res) => {
     try {
         const { name, gender, contact, address, photoUrl } = req.body;
-        const user = new User(
+        const user = new User();
+        user.save({
             name,
             gender,
             contact,
             address,
             photoUrl
-        )
+        })
         let users = JSON.parse(fs.readFileSync('./randomusers.json'));
         users.push(user);
         users = JSON.stringify(users, null, 2);
